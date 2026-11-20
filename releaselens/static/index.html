@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#eeefea">
+  <title>ReleaseLens — API release gate</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script defer src="/static/app.js"></script>
+</head>
+<body>
+  <header class="mast">
+    <a class="brand" href="/"><span class="symbol" aria-hidden="true"></span>ReleaseLens</a>
+    <span>HTTP RELEASE GATE</span>
+  </header>
+  <main>
+    <section class="lead">
+      <div>
+        <h1>Ready to ship?</h1>
+        <p>Run two API versions side by side. Check what changed in the response and where the request spent its time.</p>
+      </div>
+      <div class="ruler" aria-hidden="true"></div>
+    </section>
+    <form id="experiment">
+      <div class="field">
+        <label for="scenario">Candidate behavior</label>
+        <select id="scenario">
+          <option value="mixed">Slow lookup + changed total</option>
+          <option value="slow">Slow lookup</option>
+          <option value="contract">Changed total</option>
+          <option value="healthy">Healthy candidate</option>
+        </select>
+      </div>
+      <div class="field small">
+        <label for="repeats">Request pairs</label>
+        <input type="number" id="repeats" min="3" max="24" value="8" required>
+      </div>
+      <button id="run" type="submit">Run comparison <span aria-hidden="true">↗</span></button>
+    </form>
+    <p id="status" role="status">Starting the local API fixtures…</p>
+    <div id="results" hidden>
+      <div class="decision">
+        <div><span id="verdict"></span><p id="gate-summary"></p></div>
+        <button id="export" type="button">Export JSON</button>
+      </div>
+      <div class="panels">
+        <section class="comparison" aria-labelledby="compare-title">
+          <h2 id="compare-title">Endpoint comparison</h2>
+          <div id="cases"></div>
+          <div class="metrics" id="metrics"></div>
+          <div id="contract"></div>
+        </section>
+        <section class="trace" aria-labelledby="trace-title">
+          <h2 id="trace-title">Request waterfall</h2>
+          <p>Largest paired latency delta for the selected endpoint.</p>
+          <div id="waterfalls"></div>
+        </section>
+      </div>
+      <p class="method" id="method"></p>
+    </div>
+  </main>
+</body>
+</html>
